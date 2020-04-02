@@ -10,7 +10,6 @@ FSJS project 2 - List Filter and Pagination
 const list = document.querySelectorAll('li.student-item');
 const maxItems = 10;
 
-
 //function that takes list and page arguments to determine what students show
 const showPage = (list, page) => {
    const listItems = list;
@@ -24,20 +23,9 @@ const showPage = (list, page) => {
          listItem.style.display = 'none';
       }
    }
- }
+}
 
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
-
-// const createElement = (tagName, className, parentNode) => {
-//    let element = document.createElement(tagName);
-//    element.className = className;
-//    parentNode.appendChild(element);
-//    return element;
-// }
-
+//function to create, append and add functionality to pagination
 const appendPageLinks = (list) => {
    //function to create elements
    const createElement = (elementName, property, value) => {
