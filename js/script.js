@@ -22,18 +22,20 @@ const showPage = (list, page) => {
    }
 }
 
+//function to create elements
+const createElement = (elementName, property, value) => {
+   const element = document.createElement(elementName);
+   element[property] = value;
+   return element;
+}
+
+//function to append elements to parent elements
+const appendToParent = (parentNode, childNode) => {
+   parentNode.appendChild(childNode);
+}
+
 //function to create, append and add functionality to pagination
 const appendPageLinks = (list) => {
-   //function to create elements
-   const createElement = (elementName, property, value) => {
-      const element = document.createElement(elementName);
-      element[property] = value;
-      return element;
-   }
-   //function to append elements to parent elements
-   const appendToParent = (parentNode, childNode) => {
-      parentNode.appendChild(childNode);
-   }
    //create and append page links
    const page = document.querySelector('div.page');
    const div = createElement('div', 'className', 'pagination');
