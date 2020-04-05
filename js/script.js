@@ -72,7 +72,20 @@ const appendPageLinks = (list) => {
    }
 }
 
+const appendSearch = () => {
+   const pageHeader = document.querySelector('div.page-header');
+   console.log(pageHeader);
+   const div = createElement('div', 'className', 'student-search');
+   appendToParent(pageHeader, div);
+   const input = createElement('input');
+   input.setAttribute('placeholder', 'Search for students...');
+   appendToParent(div, input);
+   const button = createElement('button', 'textContent', 'Search');
+   appendToParent(div, button);
+}
+
 //call funtctions
 showPage(list, 1);
 appendPageLinks(list);
+appendSearch();
 
