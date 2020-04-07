@@ -36,12 +36,14 @@ const appendToParent = (parentNode, childNode) => {
 
 //function to create, append and add functionality to pagination
 const appendPageLinks = (list) => {
+   const students = list;
    //create and append page links
    const page = document.querySelector('div.page');
    const div = createElement('div', 'className', 'pagination');
    appendToParent(page, div);
-   const listItems = list;
-   const pages = Math.ceil(listItems.length / maxItems);
+   //determine number of pages
+   const pages = Math.ceil(students.length / maxItems);
+   //create and append page links
    const ul = createElement('ul');
    appendToParent(div, ul);
    for (let i = 0; i < pages; i++) {
@@ -52,13 +54,12 @@ const appendPageLinks = (list) => {
       appendToParent(li, a);
       a.textContent = i + 1;
    }
-   //set first page link's style to active initially
+   //set first page link style to active
    ul.firstElementChild.firstElementChild.className = 'active';
    //add functionality to page links using event listeners
    const pageLinks = ul.children;
    for (i = 0; i < pageLinks.length; i++) {
       pageLinks[i].addEventListener('click', (event) => {
-         const pageLinks = document.querySelectorAll('div.pagination > ul > li');
          for (i = 0; i < pageLinks.length; i++) {
             let pageLink = pageLinks[i];
             //clear classes from all page
@@ -67,14 +68,14 @@ const appendPageLinks = (list) => {
          const pageLink  = event.target;
          const pageNumber = parseInt(pageLink.textContent);
          pageLink.className = 'active';
-         showPage(list, pageNumber);
-       })
+         showPage(students, pageNumber);
+       });
    }
 }
 
+//create and append search bar
 const appendSearch = () => {
    const pageHeader = document.querySelector('div.page-header');
-   console.log(pageHeader);
    const div = createElement('div', 'className', 'student-search');
    appendToParent(pageHeader, div);
    const input = createElement('input');
@@ -88,4 +89,68 @@ const appendSearch = () => {
 showPage(list, 1);
 appendPageLinks(list);
 appendSearch();
+
+const searchList = (list) => {
+   const students = list;
+   const input = document.querySelector('div.student-search > input');
+   const button = document.querySelector('div.student-search > button');
+   let filterResults = [];
+   //function to filter list by text entry
+   const filterList = (students, text) => {
+      for (let i = 0; i < students.length; i++) {
+         let student = students[i];
+         let studentName = student.querySelector('h3');
+         if (studentName.textContent.toLowerCase().includes(text.toLowerCase())) {
+            student.style.display = 'list-item';
+            filterResults.push(student);
+         } else {
+            student.style.display = 'none';
+         }
+      }
+      if (filterResults.length === 0) {
+         const pageDiv = document.querySelector('div.page');
+         const errorDiv = createElement('div', 'className', 'error-message');
+         appendToParent(pageDiv, errorDiv);
+         const errorMessage = createElement('p', 'textContent', 'Oops! No student records match your entry. Please refine your search.');
+         appendToParent(errorDiv, errorMessage);
+      }
+   }
+   //keyup event listener to filter by user input
+   input.addEventListener('keyup', (event) => {
+      const text = event.target.value;
+      const pagination = document.querySelector('div.pagination');
+      if (text.length === 0) {
+         pagination.remove();
+         showPage(list, 1);
+         appendPageLinks(list);
+      } else if (text.length !== 0) {
+         pagination.remove();
+         filterList(students, text);
+         showPage(filterResults, 1);
+         appendPageLinks(filterResults);
+         //clear filter results
+         filterResults = [];
+      }
+   });
+   //click event listener to filter by user input
+   button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const text = input.value;
+      const pagination = document.querySelector('div.pagination');
+      if (text.length === 0) {
+         pagination.remove();
+         showPage(list, 1);
+         appendPageLinks(list); 
+      } else if (text.length !== 0) {
+         pagination.remove();
+         filterList(students, text);
+         showPage(filterResults, 1);
+         appendPageLinks(filterResults);
+         //clear filter results
+         filterResults = [];
+      }
+   });
+}
+
+searchList(list);
 

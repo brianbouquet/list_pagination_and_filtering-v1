@@ -32,6 +32,7 @@ body{
       border: 1px solid #eaeaea;
       padding: 8px 15px;
       font-size: 14px;
+      margin-right: 5px;
     }
 
     .page-header .student-search button{
@@ -94,6 +95,21 @@ body{
     padding: 0;
     border-bottom: none;
   }
+
+.error-message {
+  background-color: tomato ;
+  border: 1px solid #fa2600;
+  border-radius: 5px;
+  display: block;
+  margin-top: 35px;
+  margin-bottom: -40px;
+}
+  .error-message p{
+    color: white;
+    font-weight: bold;
+    padding: 20px;
+  }
+
 
 .pagination{
   margin: 40px 0 0 0;
