@@ -32,7 +32,12 @@ body{
       border: 1px solid #eaeaea;
       padding: 8px 15px;
       font-size: 14px;
-      margin-right: 5px;
+      margin-right: 1px;
+    }
+
+    .page-header .student-search input:focus {
+      outline: none;
+      background-color: rgba(75, 166, 195, 0.075);
     }
 
     .page-header .student-search button{
@@ -42,6 +47,10 @@ body{
       font-size: 14px;
       background-color: #4ba6c3;
       color: #fff
+    }
+
+    .page-header .student-search button:focus {
+      outline: none;
     }
 
 .student-list{}
@@ -101,8 +110,7 @@ body{
   border: 1px solid #fa2600;
   border-radius: 5px;
   display: block;
-  margin-top: 35px;
-  margin-bottom: -40px;
+  margin-top: 40px;
 }
   .error-message p{
     color: white;

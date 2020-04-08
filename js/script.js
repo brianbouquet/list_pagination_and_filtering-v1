@@ -7,7 +7,7 @@ FSJS project 2 - List Filter and Pagination
 const list = document.querySelectorAll('li.student-item');
 const maxItems = 10;
 
-//function that takes list and page arguments to determine what students show
+//function to determine what page of list items to show
 const showPage = (list, page) => {
    const listItems = list;
    const startIndex = (page * maxItems) - maxItems;
@@ -37,8 +37,8 @@ const appendToParent = (parentNode, childNode) => {
 //function to create, append and add functionality to pagination
 const appendPageLinks = (list) => {
    const students = list;
-   //create and append page links
    const page = document.querySelector('div.page');
+   //create and append page links
    const div = createElement('div', 'className', 'pagination');
    appendToParent(page, div);
    //determine number of pages
@@ -73,7 +73,7 @@ const appendPageLinks = (list) => {
    }
 }
 
-//create and append search bar
+//function to create and append search bar
 const appendSearch = () => {
    const pageHeader = document.querySelector('div.page-header');
    const div = createElement('div', 'className', 'student-search');
@@ -85,72 +85,97 @@ const appendSearch = () => {
    appendToParent(div, button);
 }
 
-//call funtctions
-showPage(list, 1);
-appendPageLinks(list);
-appendSearch();
+//function to create and append error message
+const appendError = () => {
+   const pageDiv = document.querySelector('div.page');
+   const errorDiv = createElement('div', 'className', 'error-message');
+   appendToParent(pageDiv, errorDiv);
+   const errorMessage = createElement('p', 'textContent', 'Oops! No student records match your entry. Please refine your search.');
+   appendToParent(errorDiv, errorMessage);
+   //hide error message initially
+   errorDiv.style.display = 'none';
+}
 
+//function to show error message
+const showError = () => {
+   const error = document.querySelector('div.error-message');
+   error.style.display = 'block';
+}
+
+//function to hide error message
+const hideError = () => {
+   const error = document.querySelector('div.error-message');
+   error.style.display = 'none';
+}
+
+//function to search list items
 const searchList = (list) => {
    const students = list;
    const input = document.querySelector('div.student-search > input');
    const button = document.querySelector('div.student-search > button');
    let filterResults = [];
-   //function to filter list by text entry
+   //function to filter list items by text-entry
    const filterList = (students, text) => {
-      for (let i = 0; i < students.length; i++) {
-         let student = students[i];
-         let studentName = student.querySelector('h3');
-         if (studentName.textContent.toLowerCase().includes(text.toLowerCase())) {
-            student.style.display = 'list-item';
-            filterResults.push(student);
+      const pagination = document.querySelector('div.pagination');
+      //check to see if text is entered
+      if (text.length === 0) {
+         //clear pagination and call showPage, appendPage with unfiltered list
+         pagination.remove();
+         showPage(students, 1);
+         appendPageLinks(students);
+      } else if (text.length !== 0) {
+         //loop through list and show/hide by text-entry parameter
+         for (let i = 0; i < students.length; i++) {
+            let student = students[i];
+            let studentName = student.querySelector('h3');
+            if (studentName.textContent.toLowerCase().includes(text.toLowerCase())) {
+               student.style.display = 'list-item';
+               filterResults.push(student);
+            } else {
+               student.style.display = 'none';
+            }
+         }
+         if (filterResults.length === 0) {
+            //hide pagination
+            pagination.style.display = 'none';
+            //show error message
+            showError();
          } else {
-            student.style.display = 'none';
+            //clear pagination and call showPage, appendPage with filterResults list
+            pagination.remove();
+            showPage(filterResults, 1);
+            appendPageLinks(filterResults);
+            //clear filter results
+            filterResults = [];
+            //hide error message
+            hideError();
          }
       }
-      if (filterResults.length === 0) {
-         const pageDiv = document.querySelector('div.page');
-         const errorDiv = createElement('div', 'className', 'error-message');
-         appendToParent(pageDiv, errorDiv);
-         const errorMessage = createElement('p', 'textContent', 'Oops! No student records match your entry. Please refine your search.');
-         appendToParent(errorDiv, errorMessage);
-      }
    }
-   //keyup event listener to filter by user input
+   //keyup event listener to filter by text entry
    input.addEventListener('keyup', (event) => {
       const text = event.target.value;
-      const pagination = document.querySelector('div.pagination');
-      if (text.length === 0) {
-         pagination.remove();
-         showPage(list, 1);
-         appendPageLinks(list);
-      } else if (text.length !== 0) {
-         pagination.remove();
          filterList(students, text);
-         showPage(filterResults, 1);
-         appendPageLinks(filterResults);
-         //clear filter results
-         filterResults = [];
-      }
    });
-   //click event listener to filter by user input
+   //keydown event listener to prevent bug where error shows if delete key held down
+   // input.addEventListener('keydown', () => {
+   //    if (filterResults !==0) {
+   //       hideError();
+   //    } else if (filterResults === 0) {
+   //       showError();
+   //    }
+   // });
+   //click event listener to filter by text entry
    button.addEventListener('click', (event) => {
       event.preventDefault();
       const text = input.value;
-      const pagination = document.querySelector('div.pagination');
-      if (text.length === 0) {
-         pagination.remove();
-         showPage(list, 1);
-         appendPageLinks(list); 
-      } else if (text.length !== 0) {
-         pagination.remove();
          filterList(students, text);
-         showPage(filterResults, 1);
-         appendPageLinks(filterResults);
-         //clear filter results
-         filterResults = [];
-      }
    });
 }
 
+//call funtctions
+showPage(list, 1);
+appendPageLinks(list);
+appendSearch();
 searchList(list);
-
+appendError();
