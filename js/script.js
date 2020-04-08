@@ -123,6 +123,8 @@ const searchList = (list) => {
          pagination.remove();
          showPage(students, 1);
          appendPageLinks(students);
+         //To prevent bug where error shows if delete key held down
+         hideError();
       } else if (text.length !== 0) {
          //loop through list and show/hide by text-entry parameter
          for (let i = 0; i < students.length; i++) {
@@ -157,14 +159,6 @@ const searchList = (list) => {
       const text = event.target.value;
          filterList(students, text);
    });
-   //keydown event listener to prevent bug where error shows if delete key held down
-   // input.addEventListener('keydown', () => {
-   //    if (filterResults !==0) {
-   //       hideError();
-   //    } else if (filterResults === 0) {
-   //       showError();
-   //    }
-   // });
    //click event listener to filter by text entry
    button.addEventListener('click', (event) => {
       event.preventDefault();
